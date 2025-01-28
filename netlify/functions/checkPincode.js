@@ -1,14 +1,13 @@
-import fetch from "node-fetch";
+import axios from "axios";
 import { getDistance } from "geolib";
 
 async function getCoordinatesFromPincode(pincode) {
   const url = `https://nominatim.openstreetmap.org/search?postalcode=${pincode}&country=India&format=json`;
 
   try {
-    const response = await fetch(url);
-    const data = await response.json();
+    const response = await axios.get(url);
+    const data = response.data;
 
-   
     if (data.length > 0) {
       const { lat, lon } = data[0];
       return { latitude: parseFloat(lat), longitude: parseFloat(lon) };
@@ -24,7 +23,6 @@ async function getCoordinatesFromPincode(pincode) {
 function findNearestLocation(userCoordinates, warehouseCoordinates) {
   let nearestLocation = null;
   let minDistance = Infinity;
-
 
   Object.entries(warehouseCoordinates).forEach(([pincode, coords]) => {
     const distance = getDistance(userCoordinates, coords);
@@ -99,18 +97,20 @@ export async function handler(event) {
     const userCoordinates = await getCoordinatesFromPincode(pincode);
     console.debug("Coordinates:", userCoordinates, warehouseCoordinates);
 
-    const response = await fetch(SHOPIFY_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Shopify-Access-Token": SHOPIFY_API_KEY,
-      },
-      body: JSON.stringify({ query, variables: { productId } }),
-    });
+    const response = await axios.post(
+      SHOPIFY_API_URL,
+      { query, variables: { productId } },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Shopify-Access-Token": SHOPIFY_API_KEY,
+        },
+      }
+    );
 
-    const result = await response.json();
+    const result = response.data;
 
-    if (!response.ok) {
+    if (!response.status === 200) {
       return {
         statusCode: 500,
         body: JSON.stringify({ error: result.errors || "Error fetching product data" }),
