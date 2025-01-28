@@ -3,6 +3,6 @@
   publish = "dist"
 
 [functions]
-  directory = "functions"
+  directory = "functions" 
   node_bundler = "esbuild"
 
