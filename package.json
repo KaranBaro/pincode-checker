@@ -1,0 +1,15 @@
+{
+  "name": "pincode-checker",
+  "version": "1.0.0",
+  "description": "Pincode Checker for Shopify with Netlify Functions",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "netlify dev",
+    "build": "netlify build"
+  },
+  "dependencies": {
+    "geolib": "^3.3.4",
+    "node-fetch": "^3.3.2"
+  }
+}
