@@ -1,5 +1,5 @@
-import axios from "axios";
-import { getDistance } from "geolib";
+const axios = require("axios"); // ✅ Use CommonJS require
+const { getDistance } = require("geolib"); // ✅ Use CommonJS require
 
 async function getCoordinatesFromPincode(pincode) {
   const url = `https://nominatim.openstreetmap.org/search?postalcode=${pincode}&country=India&format=json`;
@@ -36,7 +36,7 @@ function findNearestLocation(userCoordinates, warehouseCoordinates) {
   return nearestLocation;
 }
 
-export async function handler(event) {
+exports.handler = async (event) => {
   const { pincode, productId } = event.queryStringParameters;
 
   if (!pincode || !productId) {
@@ -183,4 +183,4 @@ export async function handler(event) {
       body: JSON.stringify({ error: "Server error" }),
     };
   }
-}
+};
