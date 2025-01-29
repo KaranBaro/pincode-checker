@@ -13,6 +13,6 @@
     "geolib": "^3.3.4"
   },
   "devDependencies": {
-  "netlify-cli": "^3.43.6"
-}
+    "netlify-cli": "^18.0.3"
+  }
 }
